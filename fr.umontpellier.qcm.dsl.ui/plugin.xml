@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+	<extension
+		point="org.eclipse.ui.editors">
+		<editor
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+			contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+			default="true"
+			extensions="qcm"
+			id="fr.umontpellier.qcm.QCMDsl"
+			name="QCMDsl Editor">
+		</editor>
+	</extension>
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
+			commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
+			<activeWhen>
+				<reference
+					definitionId="fr.umontpellier.qcm.QCMDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+		<handler
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
+			commandId="fr.umontpellier.qcm.QCMDsl.validate">
+			<activeWhen>
+				<reference
+					definitionId="fr.umontpellier.qcm.QCMDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+		<!-- copy qualified name -->
+		<handler
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
+			commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName">
+			<activeWhen>
+				<reference definitionId="fr.umontpellier.qcm.QCMDsl.Editor.opened" />
+			</activeWhen>
+		</handler>
+		<handler
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedNameHandler"
+			commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName">
+			<activeWhen>
+				<and>
+					<reference definitionId="fr.umontpellier.qcm.QCMDsl.XtextEditor.opened" />
+					<iterate>
+						<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
+					</iterate>
+				</and>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension point="org.eclipse.core.expressions.definitions">
+		<definition id="fr.umontpellier.qcm.QCMDsl.Editor.opened">
+			<and>
+				<reference definitionId="isActiveEditorAnInstanceOfXtextEditor"/>
+				<with variable="activeEditor">
+					<test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName"
+						value="fr.umontpellier.qcm.QCMDsl"
+						forcePluginActivation="true"/>
+				</with>
+			</and>
+		</definition>
+		<definition id="fr.umontpellier.qcm.QCMDsl.XtextEditor.opened">
+			<and>
+				<reference definitionId="isXtextEditorActive"/>
+				<with variable="activeEditor">
+					<test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName"
+						value="fr.umontpellier.qcm.QCMDsl"
+						forcePluginActivation="true"/>
+				</with>
+			</and>
+		</definition>
+	</extension>
+	<extension
+			point="org.eclipse.ui.preferencePages">
+		<page
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+			id="fr.umontpellier.qcm.QCMDsl"
+			name="QCMDsl">
+			<keywordReference id="fr.umontpellier.qcm.ui.keyword_QCMDsl"/>
+		</page>
+		<page
+			category="fr.umontpellier.qcm.QCMDsl"
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
+			id="fr.umontpellier.qcm.QCMDsl.coloring"
+			name="Syntax Coloring">
+			<keywordReference id="fr.umontpellier.qcm.ui.keyword_QCMDsl"/>
+		</page>
+		<page
+			category="fr.umontpellier.qcm.QCMDsl"
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
+			id="fr.umontpellier.qcm.QCMDsl.templates"
+			name="Templates">
+			<keywordReference id="fr.umontpellier.qcm.ui.keyword_QCMDsl"/>
+		</page>
+	</extension>
+	<extension
+			point="org.eclipse.ui.propertyPages">
+		<page
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+			id="fr.umontpellier.qcm.QCMDsl"
+			name="QCMDsl">
+			<keywordReference id="fr.umontpellier.qcm.ui.keyword_QCMDsl"/>
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+		</page>
+	</extension>
+	<extension
+		point="org.eclipse.ui.keywords">
+		<keyword
+			id="fr.umontpellier.qcm.ui.keyword_QCMDsl"
+			label="QCMDsl"/>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			description="Trigger expensive validation"
+			id="fr.umontpellier.qcm.QCMDsl.validate"
+			name="Validate">
+		</command>
+		<!-- copy qualified name -->
+		<command
+			id="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+			categoryId="org.eclipse.ui.category.edit"
+			description="Copy the qualified name for the selected element"
+			name="Copy Qualified Name">
+		</command>
+		<command
+			id="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
+			categoryId="org.eclipse.ui.category.edit"
+			description="Copy the qualified name for the selected element"
+			name="Copy Qualified Name">
+		</command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.edit">
+			<command
+				commandId="fr.umontpellier.qcm.QCMDsl.validate"
+				style="push"
+				tooltip="Trigger expensive validation">
+				<visibleWhen checkEnabled="false">
+					<reference
+						definitionId="fr.umontpellier.qcm.QCMDsl.Editor.opened">
+					</reference>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<!-- copy qualified name -->
+		<menuContribution locationURI="popup:#TextEditorContext?after=copy">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="fr.umontpellier.qcm.QCMDsl.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<menuContribution locationURI="menu:edit?after=copy">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="fr.umontpellier.qcm.QCMDsl.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<menuContribution locationURI="popup:org.eclipse.xtext.ui.outline?after=additions">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<and>
+						<reference definitionId="fr.umontpellier.qcm.QCMDsl.XtextEditor.opened" />
+						<iterate>
+							<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
+						</iterate>
+					</and>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?endof=group.find">
+			<command commandId="org.eclipse.xtext.ui.editor.FindReferences">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="fr.umontpellier.qcm.QCMDsl.Editor.opened">
+					</reference>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+		<handler
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
+			commandId="org.eclipse.xtext.ui.editor.FindReferences">
+			<activeWhen>
+				<reference
+					definitionId="fr.umontpellier.qcm.QCMDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension point="org.eclipse.core.contenttype.contentTypes">
+		<content-type
+			base-type="org.eclipse.core.runtime.text"
+			file-extensions="qcm"
+			id="fr.umontpellier.qcm.QCMDsl.contenttype"
+			name="QCMDsl File"
+			priority="normal">
+		</content-type>
+	</extension>
+	<!-- adding resource factories -->
+	<extension
+		point="org.eclipse.emf.ecore.extension_parser">
+		<parser
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
+			type="qcm">
+		</parser>
+	</extension>
+	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
+		<resourceServiceProvider
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="qcm">
+		</resourceServiceProvider>
+	</extension>
+	<!-- marker definitions for fr.umontpellier.qcm.QCMDsl -->
+	<extension
+			id="qcmdsl.check.fast"
+			name="QCMDsl Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.fast"/>
+		<persistent value="true"/>
+	</extension>
+	<extension
+			id="qcmdsl.check.normal"
+			name="QCMDsl Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.normal"/>
+		<persistent value="true"/>
+	</extension>
+	<extension
+			id="qcmdsl.check.expensive"
+			name="QCMDsl Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.expensive"/>
+		<persistent value="true"/>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="fr.umontpellier.qcm.QCMDsl"
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
+			id="fr.umontpellier.qcm.QCMDsl.validator.preferencePage"
+			name="Errors/Warnings">
+			<keywordReference id="fr.umontpellier.qcm.ui.keyword_QCMDsl"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.xtext.builder.participant">
+		<participant
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
+			fileExtensions="qcm"/>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="fr.umontpellier.qcm.QCMDsl"
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+			id="fr.umontpellier.qcm.QCMDsl.compiler.preferencePage"
+			name="Compiler">
+			<keywordReference id="fr.umontpellier.qcm.ui.keyword_QCMDsl"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.ui.propertyPages">
+		<page
+			category="fr.umontpellier.qcm.QCMDsl"
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+			id="fr.umontpellier.qcm.QCMDsl.compiler.propertyPage"
+			name="Compiler">
+			<keywordReference id="fr.umontpellier.qcm.ui.keyword_QCMDsl"/>
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?after=xtext.ui.openDeclaration">
+			<command
+				commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand"
+				id="fr.umontpellier.qcm.QCMDsl.OpenGeneratedCode"
+				style="push">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="fr.umontpellier.qcm.QCMDsl.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+		<handler
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.generator.trace.OpenGeneratedFileHandler"
+			commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand">
+			<activeWhen>
+				<reference definitionId="fr.umontpellier.qcm.QCMDsl.Editor.opened" />
+			</activeWhen>
+		</handler>
+	</extension>
+	<!-- Quick Outline -->
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
+			commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline">
+			<activeWhen>
+				<reference
+					definitionId="fr.umontpellier.qcm.QCMDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			description="Open the quick outline."
+			id="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+			name="Quick Outline">
+		</command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.open">
+			<command commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+				style="push"
+				tooltip="Open Quick Outline">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="fr.umontpellier.qcm.QCMDsl.Editor.opened"/>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<!-- quickfix marker resolution generator for fr.umontpellier.qcm.QCMDsl -->
+	<extension
+			point="org.eclipse.ui.ide.markerResolution">
+		<markerResolutionGenerator
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="fr.umontpellier.qcm.dsl.ui.qcmdsl.check.fast">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+		<markerResolutionGenerator
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="fr.umontpellier.qcm.dsl.ui.qcmdsl.check.normal">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+		<markerResolutionGenerator
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="fr.umontpellier.qcm.dsl.ui.qcmdsl.check.expensive">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+	</extension>
+	<!-- Rename Refactoring -->
+	<extension point="org.eclipse.ui.handlers">
+		<handler
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.DefaultRenameElementHandler"
+			commandId="org.eclipse.xtext.ui.refactoring.RenameElement">
+			<activeWhen>
+				<reference
+					definitionId="fr.umontpellier.qcm.QCMDsl.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.edit">
+			<command commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
+				style="push">
+				<visibleWhen checkEnabled="false">
+					<reference
+						definitionId="fr.umontpellier.qcm.QCMDsl.Editor.opened">
+					</reference>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="fr.umontpellier.qcm.QCMDsl"
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
+			id="fr.umontpellier.qcm.QCMDsl.refactoring"
+			name="Refactoring">
+			<keywordReference id="fr.umontpellier.qcm.ui.keyword_QCMDsl"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.compare.contentViewers">
+		<viewer id="fr.umontpellier.qcm.QCMDsl.compare.contentViewers"
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+			extensions="qcm">
+		</viewer>
+		<contentTypeBinding
+			contentTypeId="fr.umontpellier.qcm.QCMDsl.contenttype"
+			contentViewerId="fr.umontpellier.qcm.QCMDsl.compare.contentViewers" />
+	</extension>
+	<extension point="org.eclipse.compare.contentMergeViewers">
+		<viewer id="fr.umontpellier.qcm.QCMDsl.compare.contentMergeViewers"
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+			extensions="qcm" label="QCMDsl Compare">
+		</viewer>
+		<contentTypeBinding
+			contentTypeId="fr.umontpellier.qcm.QCMDsl.contenttype"
+			contentMergeViewerId="fr.umontpellier.qcm.QCMDsl.compare.contentMergeViewers" />
+	</extension>
+	<extension point="org.eclipse.ui.editors.documentProviders">
+		<provider id="fr.umontpellier.qcm.QCMDsl.editors.documentProviders"
+			class="fr.umontpellier.qcm.ui.QCMDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
+			extensions="qcm">
+		</provider>
+	</extension>
+	<extension point="org.eclipse.team.core.fileTypes">
+		<fileTypes
+			extension="qcm"
+			type="text">
+		</fileTypes>
+	</extension>
+</plugin>

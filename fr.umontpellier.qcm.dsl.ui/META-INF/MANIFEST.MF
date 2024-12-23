@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: fr.umontpellier.qcm.dsl.ui
+Bundle-ManifestVersion: 2
+Bundle-Name: fr.umontpellier.qcm.dsl.ui
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: fr.umontpellier.qcm.dsl.ui; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: fr.umontpellier.qcm.dsl,
+ fr.umontpellier.qcm.dsl.ide,
+ fr.umontpellier.qcm.model,
+ org.eclipse.xtext.ui,
+ org.eclipse.xtext.ui.shared,
+ org.eclipse.xtext.ui.codetemplates.ui,
+ org.eclipse.ui.editors;bundle-version="3.14.300",
+ org.eclipse.ui.ide;bundle-version="3.18.500",
+ org.eclipse.ui,
+ org.eclipse.compare,
+ org.eclipse.xtext.builder
+Import-Package: org.apache.log4j
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Export-Package: fr.umontpellier.qcm.ui.quickfix,
+ fr.umontpellier.qcm.dsl.ui.internal,
+ fr.umontpellier.qcm.ui.contentassist
+Bundle-Activator: fr.umontpellier.qcm.dsl.ui.internal.DslActivator

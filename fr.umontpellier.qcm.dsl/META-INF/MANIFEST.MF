@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: fr.umontpellier.qcm.dsl
+Bundle-ManifestVersion: 2
+Bundle-Name: fr.umontpellier.qcm.dsl
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: fr.umontpellier.qcm.dsl; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: fr.umontpellier.qcm.model,
+ org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.16.0",
+ org.eclipse.xtext.xbase.lib;bundle-version="2.37.0",
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Export-Package: fr.umontpellier.qcm.formatting2,
+ fr.umontpellier.qcm,
+ fr.umontpellier.qcm.parser.antlr.internal,
+ fr.umontpellier.qcm.scoping,
+ fr.umontpellier.qcm.parser.antlr,
+ fr.umontpellier.qcm.validation,
+ fr.umontpellier.qcm.services,
+ fr.umontpellier.qcm.serializer,
+ fr.umontpellier.qcm.generator
+Import-Package: org.apache.log4j
